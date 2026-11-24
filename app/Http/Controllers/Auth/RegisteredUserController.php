@@ -36,10 +36,15 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $username = \Illuminate\Support\Str::slug(explode('@', $request->email)[0], '_') . rand(10, 99);
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'nama_lengkap' => $request->name,
+            'username'     => $username,
+            'email'        => $request->email,
+            'password'     => Hash::make($request->password),
+            'peran'        => 'admin',
+            'status'       => 'aktif',
         ]);
 
         event(new Registered($user));

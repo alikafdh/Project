@@ -14,12 +14,23 @@ class User extends Authenticatable
 
     protected $fillable = [
         'nama_lengkap',
+        'name',
         'username',
         'email',
         'password',
         'peran',
         'status',
     ];
+
+    public function getNameAttribute(): ?string
+    {
+        return $this->nama_lengkap;
+    }
+
+    public function setNameAttribute(?string $value): void
+    {
+        $this->attributes['nama_lengkap'] = $value;
+    }
 
     protected $hidden = [
         'password',
