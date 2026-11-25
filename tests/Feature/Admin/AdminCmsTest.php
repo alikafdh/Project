@@ -7,7 +7,9 @@ use App\Models\KlasterILP;
 use App\Models\Layanan;
 use App\Models\Post;
 use App\Models\Reminder;
+use App\Models\ReminderLog;
 use App\Models\User;
+use App\Services\WhatsAppGatewayService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -455,5 +457,166 @@ class AdminCmsTest extends TestCase
 
         $response->assertSessionHasErrors('login_error');
         $this->assertTrue(str_contains(session('errors')->first('login_error'), 'Terlalu banyak percobaan login'));
+    }
+
+    public function test_whatsapp_gateway_service_sends_message(): void
+    {
+        $gateway = app(WhatsAppGatewayService::class);
+        $result = $gateway->sendMessage('+6281234567890', 'Pesan Uji Coba');
+
+        $this->assertTrue($result['success']);
+        $this->assertIsArray($result['response']);
+    }
+
+    public function test_reminder_send_daily_command_processes_active_schedules(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster 2: Ibu & Anak', 'slug' => 'klaster-2-kia']);
+        $todayDay = (int) now()->format('j');
+
+        $reminder = Reminder::create([
+            'nama_pasien'      => 'Ibu Ani',
+            'nomor_wa'         => '+6281234567891',
+            'klaster_id'       => $klaster->id,
+            'tipe_interval'    => 'bulanan',
+            'hari_ke'          => $todayDay,
+            'jam_kirim'        => '08:00:00',
+            'template_pesan'   => 'Halo {nama_pasien}, jadwal kontrol pada {tanggal} di {nama_puskesmas}.',
+            'status'           => 'aktif',
+        ]);
+
+        $this->artisan('reminder:send-daily')
+            ->expectsOutputToContain('Menjalankan pengiriman pesan WhatsApp')
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('reminder_logs', [
+            'reminder_id' => $reminder->id,
+            'status'      => 'berhasil',
+        ]);
+
+        $log = ReminderLog::where('reminder_id', $reminder->id)->first();
+        $this->assertStringContainsString('Ibu Ani', $log->pesan_terkirim);
+        $this->assertStringContainsString('UPTD Puskesmas Cilimus', $log->pesan_terkirim);
+    }
+
+    public function test_admin_can_view_patients_tab_and_register_new_patient(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster 3: Dewasa', 'slug' => 'klaster-3']);
+
+        $response = $this->actingAs($this->petugas)->get(route('admin.reminders.patients'));
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Pasien Reminder WhatsApp');
+        $response->assertSee('+ Daftarkan Pasien Baru');
+
+        $storeResponse = $this->actingAs($this->petugas)->post(route('admin.reminders.storePatient'), [
+            'nama_pasien'    => 'Bapak Budi Santoso',
+            'nomor_wa'       => '081298765432',
+            'klaster_id'     => $klaster->id,
+            'tipe_interval'  => 'bulanan',
+            'hari_ke'        => 15,
+            'jam_kirim'      => '08:00',
+            'template_pesan' => 'Mengingatkan kontrol rutin Prolanis Bpk {nama_pasien}.',
+            'status'         => 'aktif',
+        ]);
+
+        $storeResponse->assertRedirect(route('admin.reminders.patients'));
+        $this->assertDatabaseHas('reminders', [
+            'nama_pasien' => 'Bapak Budi Santoso',
+            'nomor_wa'    => '+6281298765432',
+            'status'      => 'aktif',
+        ]);
+    }
+
+    public function test_admin_can_view_schedules_tab_and_store_schedule(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster 4: P2P', 'slug' => 'klaster-4']);
+
+        $response = $this->actingAs($this->petugas)->get(route('admin.reminders.schedules'));
+        $response->assertStatus(200);
+        $response->assertSee('Jadwal & Template Reminder WhatsApp');
+        $response->assertSee('+ Buat Jadwal Baru');
+
+        $storeResponse = $this->actingAs($this->petugas)->post(route('admin.reminders.storeSchedule'), [
+            'nama_pasien'      => 'Pasien TB 01',
+            'nomor_wa'         => '+628555123456',
+            'klaster_id'       => $klaster->id,
+            'tipe_interval'    => 'bulanan',
+            'hari_ke'          => 10,
+            'jam_kirim'        => '09:00',
+            'template_pesan'   => 'Pengingat minum obat OAT {nama_pasien}.',
+            'status'           => 'aktif',
+        ]);
+
+        $storeResponse->assertRedirect(route('admin.reminders.schedules'));
+        $this->assertDatabaseHas('reminders', [
+            'nama_pasien' => 'Pasien TB 01',
+            'nomor_wa'    => '+628555123456',
+        ]);
+    }
+
+    public function test_admin_can_send_test_whatsapp_message(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster Umum', 'slug' => 'klaster-umum']);
+        $reminder = Reminder::create([
+            'nama_pasien'    => 'Uji Coba Pasien',
+            'nomor_wa'       => '+628999888777',
+            'klaster_id'     => $klaster->id,
+            'template_pesan' => 'Pesan uji {nama_pasien}',
+            'status'         => 'aktif',
+        ]);
+
+        $response = $this->actingAs($this->petugas)->post(route('admin.reminders.sendTest'), [
+            'reminder_id'  => $reminder->id,
+            'target_phone' => '+628999888777',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('reminder_logs', [
+            'reminder_id' => $reminder->id,
+            'status'      => 'berhasil',
+        ]);
+    }
+
+    public function test_admin_can_view_logs_tab_and_retry_failed_transmission(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster 2', 'slug' => 'klaster-2-log']);
+        $reminder = Reminder::create([
+            'nama_pasien'    => 'Pasien Gagal Test',
+            'nomor_wa'       => '+628111222333',
+            'klaster_id'     => $klaster->id,
+            'template_pesan' => 'Pesan pengingat kontrol',
+            'status'         => 'aktif',
+        ]);
+
+        $log = ReminderLog::create([
+            'reminder_id'    => $reminder->id,
+            'waktu_kirim'    => now()->subDay(),
+            'pesan_terkirim' => 'Pesan pengingat kontrol',
+            'status'         => 'gagal',
+            'keterangan'     => 'Koneksi timeout',
+        ]);
+
+        $response = $this->actingAs($this->petugas)->get(route('admin.reminders.logs'));
+        $response->assertStatus(200);
+        $response->assertSee('Riwayat Pengiriman Reminder WhatsApp');
+        $response->assertSee('Pasien Gagal Test');
+        $response->assertSee('Kirim Ulang');
+
+        // Test retry
+        $retryResponse = $this->actingAs($this->petugas)->post(route('admin.reminders.retry', $log->id));
+        $retryResponse->assertRedirect();
+
+        $log->refresh();
+        $this->assertEquals('berhasil', $log->status);
+    }
+
+    public function test_admin_can_export_logs_to_excel_and_pdf(): void
+    {
+        $excelResponse = $this->actingAs($this->petugas)->get(route('admin.reminders.export.excel'));
+        $excelResponse->assertStatus(200);
+        $this->assertEquals('text/csv; charset=UTF-8', $excelResponse->headers->get('content-type'));
+
+        $pdfResponse = $this->actingAs($this->petugas)->get(route('admin.reminders.export.pdf'));
+        $pdfResponse->assertStatus(200);
+        $pdfResponse->assertSee('Laporan Rekapitulasi Riwayat Pengiriman Reminder WhatsApp');
     }
 }
