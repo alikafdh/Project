@@ -32,7 +32,7 @@ class LayananController extends Controller
         $validated = $request->validate([
             'nama_poli'      => ['required', 'string', 'max:100'],
             'klaster_id'     => ['required', 'exists:klaster_ilp,id'],
-            'jadwal_praktik' => ['required', 'string'],
+            'jadwal_praktik' => ['required', 'string', 'max:255'],
             'tenaga_medis'   => ['nullable', 'string', 'max:150'],
             'deskripsi'      => ['nullable', 'string'],
             'status'         => ['required', 'in:aktif,nonaktif'],
@@ -62,7 +62,7 @@ class LayananController extends Controller
         $validated = $request->validate([
             'nama_poli'      => ['required', 'string', 'max:100'],
             'klaster_id'     => ['required', 'exists:klaster_ilp,id'],
-            'jadwal_praktik' => ['required', 'string'],
+            'jadwal_praktik' => ['required', 'string', 'max:255'],
             'tenaga_medis'   => ['nullable', 'string', 'max:150'],
             'deskripsi'      => ['nullable', 'string'],
             'status'         => ['required', 'in:aktif,nonaktif'],

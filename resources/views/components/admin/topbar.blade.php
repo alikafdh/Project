@@ -26,14 +26,22 @@
 @endphp
 
 <header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-xs">
-    <!-- Sisi Kiri: Toggle Hamburger Mobile & Breadcrumb Navigasi Dinamis -->
+    <!-- Sisi Kiri: Toggle Buka/Tutup Sidebar & Breadcrumb Navigasi Dinamis -->
     <div class="flex items-center gap-3">
-        <!-- Tombol Toggle Hamburger Mobile -->
-        <button @click="sidebarOpen = !sidebarOpen" 
+        <!-- Tombol Toggle Buka/Tutup Sidebar (Desktop & Mobile) -->
+        <button @click="toggleSidebar()" 
                 type="button" 
-                class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors md:hidden"
+                class="p-2 rounded-xl text-slate-600 hover:bg-emerald-50 hover:text-[#2E7D32] border border-transparent hover:border-emerald-200 transition-all inline-flex items-center justify-center cursor-pointer"
+                :title="(typeof window !== 'undefined' && window.innerWidth >= 768) ? (desktopSidebarOpen ? 'Tutup Sidebar' : 'Buka Sidebar') : (sidebarOpen ? 'Tutup Menu' : 'Buka Menu')"
                 aria-label="Toggle Menu Navigasi">
-            <span class="material-symbols-outlined text-[24px]">menu</span>
+            <span class="hidden md:inline-flex items-center justify-center">
+                <span x-show="desktopSidebarOpen" class="material-symbols-outlined text-[22px]">menu_open</span>
+                <span x-show="!desktopSidebarOpen" x-cloak class="material-symbols-outlined text-[22px]">menu</span>
+            </span>
+            <span class="inline-flex md:hidden items-center justify-center">
+                <span x-show="!sidebarOpen" class="material-symbols-outlined text-[22px]">menu</span>
+                <span x-show="sidebarOpen" x-cloak class="material-symbols-outlined text-[22px]">close</span>
+            </span>
         </button>
 
         <!-- Breadcrumb Navigasi Dinamis -->

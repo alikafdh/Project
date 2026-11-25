@@ -23,8 +23,8 @@
                         <span>Sistem Online • Status Aktif</span>
                     </span>
                     <span class="text-slate-300">•</span>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-semibold border border-blue-100">
-                        <span class="material-symbols-outlined text-[15px] text-blue-600">hub</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-green-50 text-[#2E7D32] font-semibold border border-green-200">
+                        <span class="material-symbols-outlined text-[15px] text-[#2E7D32]">hub</span>
                         <span>Standar ILP Kemenkes RI</span>
                     </span>
                 </div>
@@ -66,21 +66,21 @@
                 </div>
             </div>
 
-            <!-- Card 2: Pasien Reminder (Aksen Biru) -->
-            <div class="bg-blue-50 border border-blue-200 text-blue-800 p-5 rounded-2xl shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
+            <!-- Card 2: Pasien Reminder (Aksen Hijau Daun) -->
+            <div class="bg-[#E8F5E9] border border-[#A5D6A7] text-[#1B5E20] p-5 rounded-2xl shadow-xs flex flex-col justify-between hover:shadow-md transition-all">
                 <div class="flex items-start justify-between">
-                    <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-blue-600 shadow-xs border border-blue-200">
+                    <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center text-[#2E7D32] shadow-xs border border-[#A5D6A7]">
                         <span class="material-symbols-outlined text-[26px]">group</span>
                     </div>
-                    <span class="px-2.5 py-0.5 rounded-full bg-blue-200/80 text-blue-900 text-xs font-bold">
+                    <span class="px-2.5 py-0.5 rounded-full bg-[#C8E6C9] text-[#1B5E20] text-xs font-bold">
                         Otomasi WA
                     </span>
                 </div>
                 <div class="mt-4">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-700">Pasien Reminder</span>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-[#2E7D32]">Pasien Reminder</span>
                     <div class="text-3xl font-extrabold text-slate-900 mt-1">{{ $totalPasienReminder }}</div>
                 </div>
-                <div class="mt-3 pt-2.5 border-t border-blue-200/60 text-xs text-blue-700 font-medium flex items-center gap-1.5">
+                <div class="mt-3 pt-2.5 border-t border-[#A5D6A7]/70 text-xs text-[#1B5E20] font-medium flex items-center gap-1.5">
                     <span>Sasaran Aktif Terdaftar</span>
                 </div>
             </div>
@@ -208,7 +208,7 @@
                                                 Agenda
                                             </span>
                                         @else
-                                            <span class="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#1D4ED8] border border-blue-200 font-bold text-xs uppercase">
+                                            <span class="px-2.5 py-0.5 rounded-full bg-green-50 text-[#2E7D32] border border-green-200 font-bold text-xs uppercase">
                                                 Berita
                                             </span>
                                         @endif

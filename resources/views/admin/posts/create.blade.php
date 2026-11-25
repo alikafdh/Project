@@ -450,7 +450,9 @@
         </form>
 
         <!-- FLOATING ACTION BAR DI BAGIAN BAWAH -->
-        <div class="fixed bottom-0 left-0 md:left-60 right-0 bg-white/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(0,0,0,0.06)] z-30 px-6 md:px-8 py-3.5 border-t border-slate-200">
+        <div data-admin-floating-bar
+             :class="{ 'md:left-60': desktopSidebarOpen, 'md:left-0': !desktopSidebarOpen }"
+             class="fixed bottom-0 left-0 md:left-60 right-0 bg-white/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(0,0,0,0.06)] z-30 px-6 md:px-8 py-3.5 border-t border-slate-200 transition-[left] duration-300 ease-in-out">
             <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
                     <a href="{{ route('admin.posts.index') }}" class="h-11 px-5 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-colors">

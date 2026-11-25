@@ -42,12 +42,12 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-[#2E7D32]">
                                     {{ $klaster->posts_count }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-[#E8F5E9] text-[#1B5E20]">
                                     {{ $klaster->reminders_count }}
                                 </span>
                             </td>

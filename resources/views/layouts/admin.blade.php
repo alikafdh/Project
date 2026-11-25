@@ -17,14 +17,49 @@
 
     <!-- Scripts & Styles via Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Pre-init state sidebar desktop agar tidak berkedip saat navigasi -->
+    <script>
+        try {
+            if (localStorage.getItem('admin_sidebar_open') === 'false') {
+                document.documentElement.classList.add('admin-sidebar-closed');
+            }
+        } catch (e) {}
+    </script>
 </head>
 <body class="h-full font-sans antialiased text-slate-800">
-    <div x-data="{ sidebarOpen: false }" class="bg-slate-100 min-h-screen flex">
+    <div x-data="{
+            sidebarOpen: false,
+            desktopSidebarOpen: (() => {
+                try {
+                    const saved = localStorage.getItem('admin_sidebar_open');
+                    return saved === null ? true : saved === 'true';
+                } catch (e) {
+                    return true;
+                }
+            })(),
+            toggleSidebar() {
+                if (window.innerWidth >= 768) {
+                    this.desktopSidebarOpen = !this.desktopSidebarOpen;
+                    document.documentElement.classList.toggle('admin-sidebar-closed', !this.desktopSidebarOpen);
+                    try {
+                        localStorage.setItem('admin_sidebar_open', String(this.desktopSidebarOpen));
+                    } catch (e) {}
+                } else {
+                    this.sidebarOpen = !this.sidebarOpen;
+                }
+            }
+        }"
+        @keydown.escape.window="sidebarOpen = false"
+        @resize.window="if (window.innerWidth >= 768) sidebarOpen = false"
+        class="bg-slate-100 min-h-screen flex">
         <!-- Sidebar Navigation Component -->
         <x-admin.sidebar />
 
         <!-- Area Konten Utama -->
-        <div class="flex-1 md:pl-60 flex flex-col min-h-screen">
+        <div data-admin-main
+             :class="{ 'md:pl-60': desktopSidebarOpen, 'md:pl-0': !desktopSidebarOpen }"
+             class="flex-1 md:pl-60 flex flex-col min-h-screen transition-[padding] duration-300 ease-in-out">
             <!-- Topbar Admin Component -->
             <x-admin.topbar :title="$title ?? null" />
 

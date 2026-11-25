@@ -79,11 +79,11 @@
                 <div>
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tayangan</span>
                     <h3 class="text-2xl font-bold text-slate-800 mt-1">{{ number_format($totalViews) }}</h3>
-                    <p class="text-xs text-blue-600 font-medium flex items-center gap-1 mt-0.5">
+                    <p class="text-xs text-[#2E7D32] font-medium flex items-center gap-1 mt-0.5">
                         <span class="material-symbols-outlined text-[14px]">visibility</span> Dibaca oleh warga
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-[#2E7D32]">
                     <span class="material-symbols-outlined text-[24px]">query_stats</span>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                                             Agenda
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-[#2E7D32] border border-green-200">
                                             <span class="material-symbols-outlined text-[14px]">newspaper</span>
                                             Berita
                                         </span>
@@ -278,7 +278,7 @@
 
                                         <!-- Tombol Edit -->
                                         <a href="{{ route('admin.posts.edit', $post) }}" 
-                                            class="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors" 
+                                            class="p-2 rounded-lg text-slate-500 hover:text-[#2E7D32] hover:bg-emerald-50 transition-colors" 
                                             title="Edit Postingan">
                                             <span class="material-symbols-outlined text-[18px]">edit</span>
                                         </a>

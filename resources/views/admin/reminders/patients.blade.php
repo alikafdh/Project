@@ -81,12 +81,12 @@
             <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Jadwal Aktif Terdaftar</span>
-                    <h3 class="text-2xl font-bold text-blue-700 mt-1">{{ $scheduledThisWeek }}</h3>
-                    <p class="text-xs text-blue-600 font-medium flex items-center gap-1 mt-0.5">
+                    <h3 class="text-2xl font-bold text-[#2E7D32] mt-1">{{ $scheduledThisWeek }}</h3>
+                    <p class="text-xs text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
                         <span class="material-symbols-outlined text-[14px]">schedule_send</span> Terhubung ke gateway
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-[#2E7D32]">
                     <span class="material-symbols-outlined text-[26px]">notifications_active</span>
                 </div>
             </div>
