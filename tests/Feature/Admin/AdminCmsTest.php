@@ -429,6 +429,9 @@ class AdminCmsTest extends TestCase
         $response->assertSee(route('admin.saran.index'));
         $response->assertSee('Sistem Normal');
         $response->assertSee(route('admin.logout'));
+        $response->assertSee('toggleSidebar()', false);
+        $response->assertSee('data-admin-sidebar', false);
+        $response->assertSee('data-admin-main', false);
 
         // Regular admin should not see user management link
         $response->assertDontSee(route('admin.users.index'));

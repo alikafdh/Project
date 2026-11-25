@@ -45,29 +45,29 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div>
                         <label for="no_telepon" class="block text-sm font-semibold text-slate-700">Nomor Telepon Kantor <span class="text-rose-500">*</span></label>
-                        <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon', $profil->no_telepon) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 text-sm">
+                        <input type="text" name="no_telepon" id="no_telepon" value="{{ old('no_telepon', $profil->no_telepon) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
 
                     <div>
                         <label for="wa_number" class="block text-sm font-semibold text-slate-700">Nomor WhatsApp Resmi <span class="text-rose-500">*</span></label>
-                        <input type="text" name="wa_number" id="wa_number" value="{{ old('wa_number', $profil->wa_number) }}" placeholder="6281123456789" required class="mt-1.5 block w-full rounded-xl border-slate-300 text-sm">
+                        <input type="text" name="wa_number" id="wa_number" value="{{ old('wa_number', $profil->wa_number) }}" placeholder="6281123456789" required class="mt-1.5 block w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
 
                     <div>
                         <label for="email" class="block text-sm font-semibold text-slate-700">Email Resmi Puskesmas <span class="text-rose-500">*</span></label>
-                        <input type="email" name="email" id="email" value="{{ old('email', $profil->email) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 text-sm">
+                        <input type="email" name="email" id="email" value="{{ old('email', $profil->email) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
                         <label for="alamat" class="block text-sm font-semibold text-slate-700">Alamat Lengkap <span class="text-rose-500">*</span></label>
-                        <input type="text" name="alamat" id="alamat" value="{{ old('alamat', $profil->alamat) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 text-sm">
+                        <input type="text" name="alamat" id="alamat" value="{{ old('alamat', $profil->alamat) }}" required class="mt-1.5 block w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
 
                     <div>
                         <label for="koordinat_peta" class="block text-sm font-semibold text-slate-700">Koordinat Peta (Latitude, Longitude)</label>
-                        <input type="text" name="koordinat_peta" id="koordinat_peta" value="{{ old('koordinat_peta', $profil->koordinat_peta) }}" placeholder="-6.9829285,108.4989679" class="mt-1.5 block w-full rounded-xl border-slate-300 text-sm">
+                        <input type="text" name="koordinat_peta" id="koordinat_peta" value="{{ old('koordinat_peta', $profil->koordinat_peta) }}" placeholder="-6.9829285,108.4989679" class="mt-1.5 block w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 text-sm">
                     </div>
                 </div>
             </div>

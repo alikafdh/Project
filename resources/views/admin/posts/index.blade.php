@@ -1,5 +1,5 @@
 <x-admin-layout title="Kelola Informasi">
-    <div class="space-y-6" x-data="{ 
+    <div class="space-y-6 min-w-0 w-full" x-data="{ 
         deleteModalOpen: false, 
         deleteUrl: '', 
         deleteTitle: '',
@@ -16,9 +16,9 @@
         }
     }">
         <!-- Top Breadcrumb & Title Section -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="space-y-1">
-                <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="space-y-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 font-medium">
                     <span>Admin Portal</span>
                     <span class="material-symbols-outlined text-[14px]">chevron_right</span>
                     <span>UPTD Puskesmas Cilimus</span>
@@ -30,8 +30,8 @@
                     Manajemen dan kurasi publikasi laporan program kerja, edukasi kesehatan masyarakat, serta agenda posyandu terintegrasi di wilayah kerja Kecamatan Cilimus.
                 </p>
             </div>
-            <div class="flex items-center gap-3 self-start md:self-auto">
-                <a href="{{ route('admin.posts.create') }}" class="h-11 px-5 rounded-xl text-white font-bold flex items-center gap-2 shadow-sm transition-all hover:opacity-95" style="background-color: #2E7D32;">
+            <div class="flex items-center gap-3 self-start lg:self-auto flex-shrink-0">
+                <a href="{{ route('admin.posts.create') }}" class="h-11 px-5 rounded-xl text-white text-sm font-bold flex items-center gap-2 shadow-sm transition-all hover:opacity-95 whitespace-nowrap flex-shrink-0" style="background-color: #2E7D32;">
                     <span class="material-symbols-outlined text-[20px]">add_circle</span>
                     <span>+ Tambah Konten Baru</span>
                 </a>
@@ -39,51 +39,53 @@
         </div>
 
         <!-- 4 Summary Metric Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-3">
+                <div class="min-w-0">
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Publikasi</span>
                     <h3 class="text-2xl font-bold text-slate-800 mt-1">{{ $totalPosts }}</h3>
                     <p class="text-xs text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
-                        <span class="material-symbols-outlined text-[14px]">article</span> Laporan &bull; Berita &bull; Agenda
+                        <span class="material-symbols-outlined text-[14px] flex-shrink-0">article</span>
+                        <span class="truncate">Laporan &bull; Berita &bull; Agenda</span>
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700">
+                <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 flex-shrink-0">
                     <span class="material-symbols-outlined text-[24px]">library_books</span>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-3">
+                <div class="min-w-0">
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Terbit (Live)</span>
                     <h3 class="text-2xl font-bold text-emerald-700 mt-1">{{ $publishedPosts }}</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Akses publik aktif</p>
+                    <p class="text-xs text-slate-500 mt-0.5 truncate">Akses publik aktif</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
                     <span class="material-symbols-outlined text-[24px]">check_circle</span>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-3">
+                <div class="min-w-0">
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Draf Internal</span>
                     <h3 class="text-2xl font-bold text-amber-600 mt-1">{{ $draftPosts }}</h3>
-                    <p class="text-xs text-slate-500 mt-0.5">Belum dipublikasikan</p>
+                    <p class="text-xs text-slate-500 mt-0.5 truncate">Belum dipublikasikan</p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600">
+                <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
                     <span class="material-symbols-outlined text-[24px]">edit_note</span>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                <div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-3">
+                <div class="min-w-0">
                     <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tayangan</span>
                     <h3 class="text-2xl font-bold text-slate-800 mt-1">{{ number_format($totalViews) }}</h3>
-                    <p class="text-xs text-blue-600 font-medium flex items-center gap-1 mt-0.5">
-                        <span class="material-symbols-outlined text-[14px]">visibility</span> Dibaca oleh warga
+                    <p class="text-xs text-[#2E7D32] font-medium flex items-center gap-1 mt-0.5">
+                        <span class="material-symbols-outlined text-[14px] flex-shrink-0">visibility</span>
+                        <span class="truncate">Dibaca oleh warga</span>
                     </p>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-[#2E7D32] flex-shrink-0">
                     <span class="material-symbols-outlined text-[24px]">query_stats</span>
                 </div>
             </div>
@@ -91,15 +93,15 @@
 
         <!-- Filter & Search Toolbar -->
         <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-            <form method="GET" action="{{ route('admin.posts.index') }}" class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-                <div class="relative flex-1">
+            <form method="GET" action="{{ route('admin.posts.index') }}" class="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3">
+                <div class="relative flex-1 min-w-0">
                     <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">search</span>
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul konten atau kata kunci..." class="w-full h-11 pl-10 pr-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-[#2E7D32] focus:ring-[#2E7D32] transition-all">
                 </div>
 
-                <div class="flex flex-wrap items-center gap-2.5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-wrap items-center gap-2.5">
                     <!-- Filter Tipe -->
-                    <div class="min-w-[140px]">
+                    <div class="w-full lg:w-40">
                         <select name="tipe" class="w-full h-11 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:bg-white focus:border-[#2E7D32] focus:ring-[#2E7D32] cursor-pointer">
                             <option value="">Semua Tipe</option>
                             <option value="berita" {{ request('tipe') === 'berita' ? 'selected' : '' }}>📰 Berita Kesehatan</option>
@@ -109,7 +111,7 @@
                     </div>
 
                     <!-- Filter Klaster -->
-                    <div class="min-w-[180px]">
+                    <div class="w-full lg:w-52">
                         <select name="klaster_id" class="w-full h-11 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:bg-white focus:border-[#2E7D32] focus:ring-[#2E7D32] cursor-pointer">
                             <option value="">Semua Klaster ILP</option>
                             @foreach($klasters as $klaster)
@@ -121,7 +123,7 @@
                     </div>
 
                     <!-- Filter Status -->
-                    <div class="min-w-[140px]">
+                    <div class="w-full lg:w-40">
                         <select name="status" class="w-full h-11 px-3 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:bg-white focus:border-[#2E7D32] focus:ring-[#2E7D32] cursor-pointer">
                             <option value="">Semua Status</option>
                             <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published (Terbit)</option>
@@ -129,34 +131,36 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="h-11 px-4 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-900 transition-colors flex items-center gap-1.5 shadow-sm">
-                        <span class="material-symbols-outlined text-[16px]">filter_list</span>
-                        <span>Filter</span>
-                    </button>
+                    <div class="flex items-center gap-2 sm:col-span-2 lg:col-span-1 flex-shrink-0">
+                        <button type="submit" class="h-11 px-4 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-900 transition-colors flex items-center justify-center gap-1.5 shadow-sm whitespace-nowrap flex-1 sm:flex-initial">
+                            <span class="material-symbols-outlined text-[16px]">filter_list</span>
+                            <span>Filter</span>
+                        </button>
 
-                    @if(request()->anyFilled(['search', 'tipe', 'klaster_id', 'status']))
-                        <a href="{{ route('admin.posts.index') }}" class="h-11 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 flex items-center transition-colors">
-                            Reset
-                        </a>
-                    @endif
+                        @if(request()->anyFilled(['search', 'tipe', 'klaster_id', 'status']))
+                            <a href="{{ route('admin.posts.index') }}" class="h-11 px-3 rounded-xl border border-slate-200 text-xs font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 flex items-center justify-center transition-colors whitespace-nowrap">
+                                Reset
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </form>
         </div>
 
         <!-- Table Data Section -->
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col">
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden flex flex-col min-w-0">
             <div class="overflow-x-auto w-full">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-500 text-xs uppercase tracking-wider font-semibold">
-                            <th class="py-4 px-4 w-12 text-center">No</th>
+                            <th class="py-4 px-3 w-12 text-center">No</th>
                             <th class="py-4 px-3 w-20">Thumbnail</th>
-                            <th class="py-4 px-4">Judul Post &amp; Penulis</th>
-                            <th class="py-4 px-3">Tipe</th>
-                            <th class="py-4 px-3">Klaster Layanan</th>
-                            <th class="py-4 px-3 text-center">Status</th>
-                            <th class="py-4 px-4">Tanggal Dibuat</th>
-                            <th class="py-4 px-4 text-right sticky right-0 z-20 bg-slate-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.06)] min-w-[140px]">
+                            <th class="py-4 px-4 min-w-[220px]">Judul Post &amp; Penulis</th>
+                            <th class="py-4 px-3 whitespace-nowrap">Tipe</th>
+                            <th class="py-4 px-3 whitespace-nowrap">Klaster Layanan</th>
+                            <th class="py-4 px-3 text-center whitespace-nowrap">Status</th>
+                            <th class="py-4 px-4 whitespace-nowrap">Tanggal Dibuat</th>
+                            <th class="py-4 px-4 text-right whitespace-nowrap sticky right-0 z-20 bg-slate-50 shadow-[-4px_0_6px_-2px_rgba(0,0,0,0.06)] w-[124px]">
                                 Aksi
                             </th>
                         </tr>
@@ -165,7 +169,7 @@
                         @forelse($posts as $index => $post)
                             <tr class="hover:bg-slate-50/70 transition-colors group">
                                 <!-- No -->
-                                <td class="py-4 px-4 text-center text-xs font-mono text-slate-400">
+                                <td class="py-4 px-3 text-center text-xs font-mono text-slate-400">
                                     {{ $posts->firstItem() + $index }}
                                 </td>
 
@@ -188,18 +192,20 @@
                                 </td>
 
                                 <!-- Judul Post & Penulis -->
-                                <td class="py-4 px-4 min-w-[260px] max-w-md">
-                                    <div class="font-bold text-slate-800 line-clamp-1 group-hover:text-[#2E7D32] transition-colors">
-                                        {{ $post->judul }}
-                                    </div>
-                                    <div class="flex items-center gap-1.5 mt-1 text-xs text-slate-400">
-                                        <span class="material-symbols-outlined text-[13px]">person</span>
-                                        <span class="truncate">{{ $post->author->nama_lengkap ?? 'Petugas Puskesmas' }}</span>
-                                        <span>&bull;</span>
-                                        <span class="flex items-center gap-0.5">
-                                            <span class="material-symbols-outlined text-[12px]">visibility</span>
-                                            {{ number_format($post->views) }}
-                                        </span>
+                                <td class="py-4 px-4">
+                                    <div class="min-w-[220px] max-w-[300px]">
+                                        <div class="font-bold text-slate-800 line-clamp-1 group-hover:text-[#2E7D32] transition-colors" title="{{ $post->judul }}">
+                                            {{ $post->judul }}
+                                        </div>
+                                        <div class="flex items-center gap-1.5 mt-1 text-xs text-slate-400 min-w-0">
+                                            <span class="material-symbols-outlined text-[13px] flex-shrink-0">person</span>
+                                            <span class="truncate">{{ $post->author->nama_lengkap ?? 'Petugas Puskesmas' }}</span>
+                                            <span class="flex-shrink-0">&bull;</span>
+                                            <span class="flex items-center gap-0.5 flex-shrink-0">
+                                                <span class="material-symbols-outlined text-[12px]">visibility</span>
+                                                {{ number_format($post->views) }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
 
@@ -216,7 +222,7 @@
                                             Agenda
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-[#2E7D32] border border-green-200">
                                             <span class="material-symbols-outlined text-[14px]">newspaper</span>
                                             Berita
                                         </span>
@@ -226,8 +232,8 @@
                                 <!-- Klaster Badge -->
                                 <td class="py-4 px-3 whitespace-nowrap">
                                     @if($post->klaster)
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                                            {{ $post->klaster->nama }}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 max-w-[200px]" title="{{ $post->klaster->nama }}">
+                                            <span class="truncate">{{ $post->klaster->nama }}</span>
                                         </span>
                                     @else
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-50 text-slate-400 border border-slate-200">
@@ -278,7 +284,7 @@
 
                                         <!-- Tombol Edit -->
                                         <a href="{{ route('admin.posts.edit', $post) }}" 
-                                            class="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors" 
+                                            class="p-2 rounded-lg text-slate-500 hover:text-[#2E7D32] hover:bg-emerald-50 transition-colors" 
                                             title="Edit Postingan">
                                             <span class="material-symbols-outlined text-[18px]">edit</span>
                                         </a>

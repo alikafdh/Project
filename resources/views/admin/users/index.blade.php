@@ -188,7 +188,7 @@
                                 </td>
 
                                 <td class="py-4 px-4 whitespace-nowrap text-xs text-slate-600">
-                                    <a href="mailto:{{ $u->email }}" class="hover:text-blue-600 hover:underline flex items-center gap-1">
+                                    <a href="mailto:{{ $u->email }}" class="hover:text-[#2E7D32] hover:underline flex items-center gap-1">
                                         <span class="material-symbols-outlined text-[14px] text-slate-400">mail</span>
                                         {{ $u->email }}
                                     </a>
@@ -234,7 +234,7 @@
                                                     peran: '{{ $u->peran }}',
                                                     status: '{{ $u->status }}'
                                                 }, '{{ route('admin.users.update', $u) }}')"
-                                                class="p-2 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                                                class="p-2 rounded-lg text-slate-500 hover:text-[#2E7D32] hover:bg-emerald-50 transition-colors"
                                                 title="Edit Akun Petugas">
                                             <span class="material-symbols-outlined text-[18px]">edit</span>
                                         </button>
@@ -377,7 +377,7 @@
             <div @click.away="editModalOpen = false" class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 text-[#2E7D32] flex items-center justify-center">
                             <span class="material-symbols-outlined text-[18px]">manage_accounts</span>
                         </div>
                         <h3 class="text-base font-bold text-slate-800">Ubah Data Akun Pengelola</h3>

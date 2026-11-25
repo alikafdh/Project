@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[x-cloak] {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    html.admin-sidebar-closed aside[data-admin-sidebar] {
+        transform: translateX(-100%);
+    }
+
+    html.admin-sidebar-closed div[data-admin-main] {
+        padding-left: 0;
+    }
+
+    html.admin-sidebar-closed div[data-admin-floating-bar] {
+        left: 0;
+    }
+}

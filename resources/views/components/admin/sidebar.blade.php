@@ -16,12 +16,18 @@
      style="display: none;"></div>
 
 <!-- Sidebar Container -->
-<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
-       class="fixed inset-y-0 left-0 z-50 w-60 bg-[#1A2B4A] text-slate-300 flex flex-col justify-between shadow-2xl transition-transform duration-300 ease-in-out border-r border-slate-700/50">
+<aside data-admin-sidebar
+       :class="{
+           'translate-x-0': sidebarOpen,
+           '-translate-x-full': !sidebarOpen,
+           'md:translate-x-0': desktopSidebarOpen,
+           'md:-translate-x-full': !desktopSidebarOpen
+       }"
+       class="fixed inset-y-0 left-0 z-50 w-60 bg-[#003822] text-emerald-100/85 flex flex-col justify-between shadow-2xl transition-transform duration-300 ease-in-out border-r border-emerald-950/60 -translate-x-full md:translate-x-0">
 
     <div class="flex flex-col min-h-0 flex-1">
         <!-- 1. Header Sidebar -->
-        <div class="h-16 px-4 flex items-center justify-between border-b border-slate-700/60 bg-[#132038] flex-shrink-0">
+        <div class="h-16 px-4 flex items-center justify-between border-b border-white/10 bg-[#002918] flex-shrink-0">
             <div class="flex items-center gap-3 min-w-0">
                 <div class="w-9 h-9 rounded-lg bg-[#2E7D32] flex items-center justify-center text-white shadow-sm flex-shrink-0">
                     <span class="material-symbols-outlined text-[22px]">local_hospital</span>
@@ -32,7 +38,7 @@
                 </div>
             </div>
             <!-- Mobile Close Button -->
-            <button @click="sidebarOpen = false" type="button" class="md:hidden text-slate-400 hover:text-white p-1">
+            <button @click="sidebarOpen = false" type="button" class="md:hidden text-emerald-200/70 hover:text-white p-1">
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
@@ -41,35 +47,35 @@
         <nav class="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto">
             <!-- 🏠 Dashboard -->
             <a href="{{ route('admin.dashboard') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <span class="material-symbols-outlined text-[20px]">dashboard</span>
                 <span>Dashboard</span>
             </a>
 
             <!-- 📝 Kelola Informasi -->
             <a href="{{ route('admin.posts.index') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.posts.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.posts.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <span class="material-symbols-outlined text-[20px]">newspaper</span>
                 <span>Kelola Informasi</span>
             </a>
 
             <!-- 🏷️ Kelola Klaster ILP -->
             <a href="{{ route('admin.clusters.index') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ (request()->routeIs('admin.clusters.*') || request()->routeIs('admin.klaster.*')) ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ (request()->routeIs('admin.clusters.*') || request()->routeIs('admin.klaster.*')) ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <span class="material-symbols-outlined text-[20px]">category</span>
                 <span>Kelola Klaster ILP</span>
             </a>
 
             <!-- 🏥 Kelola Layanan / Poli -->
             <a href="{{ route('admin.layanan.index') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.layanan.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.layanan.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <span class="material-symbols-outlined text-[20px]">medical_services</span>
                 <span>Kelola Layanan / Poli</span>
             </a>
 
             <!-- 👤 Kelola Profil Puskesmas -->
             <a href="{{ route('admin.profil.edit') }}" 
-               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.profil.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.profil.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <span class="material-symbols-outlined text-[20px]">account_balance</span>
                 <span>Kelola Profil Puskesmas</span>
             </a>
@@ -78,36 +84,42 @@
             <div x-data="{ open: {{ $isReminderActive ? 'true' : 'false' }} }" class="space-y-1">
                 <button @click="open = !open" 
                         type="button" 
-                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ $isReminderActive ? 'bg-white/10 text-white font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                        class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ $isReminderActive ? 'bg-white/10 text-white font-semibold' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[20px]">chat</span>
                         <span>Reminder WhatsApp</span>
                     </div>
-                    <span class="material-symbols-outlined text-[18px] text-slate-400 transition-transform duration-200" 
+                    <span class="material-symbols-outlined text-[18px] text-emerald-200/70 transition-transform duration-200" 
                           :class="open ? 'rotate-180 text-white' : ''">expand_more</span>
                 </button>
 
                 <!-- Sub-Menu Accordion Items -->
                 <div x-show="open" 
-                     x-collapse 
+                     x-transition:enter="transition ease-out duration-150"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-transition:leave="transition ease-in duration-100"
+                     x-transition:leave-start="opacity-100 translate-y-0"
+                     x-transition:leave-end="opacity-0 -translate-y-1"
+                     @if(!$isReminderActive) x-cloak @endif
                      class="pl-4 pr-1 py-1 space-y-1 border-l-2 border-emerald-500/40 ml-4">
                     <!-- Pasien Terdaftar -->
                     <a href="{{ route('admin.reminders.patients') }}" 
-                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.patients') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.patients') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                         <span class="material-symbols-outlined text-[16px]">person_search</span>
                         <span>Pasien Terdaftar</span>
                     </a>
 
                     <!-- Jadwal & Template -->
                     <a href="{{ route('admin.reminders.schedules') }}" 
-                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.schedules') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.schedules') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                         <span class="material-symbols-outlined text-[16px]">event_note</span>
                         <span>Jadwal & Template</span>
                     </a>
 
                     <!-- Log Pengiriman -->
                     <a href="{{ route('admin.reminders.logs') }}" 
-                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.logs') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                       class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs font-medium transition-all {{ request()->routeIs('admin.reminders.logs') ? 'bg-[#2E7D32] text-white font-semibold shadow-xs ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                         <span class="material-symbols-outlined text-[16px]">history</span>
                         <span>Log Pengiriman</span>
                     </a>
@@ -116,7 +128,7 @@
 
             <!-- 💬 Kotak Saran -->
             <a href="{{ route('admin.saran.index') }}" 
-               class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.saran.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+               class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.saran.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                 <div class="flex items-center gap-3">
                     <span class="material-symbols-outlined text-[20px]">inbox</span>
                     <span>Kotak Saran</span>
@@ -131,7 +143,7 @@
             <!-- 👥 Kelola Akun (Khusus Superadmin) -->
             @if(auth()->check() && auth()->user()->peran === 'superadmin')
                 <a href="{{ route('admin.users.index') }}" 
-                   class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.users.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm' : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
+                   class="flex items-center justify-between px-3 py-2.5 rounded-xl transition-all text-sm font-medium {{ request()->routeIs('admin.users.*') ? 'bg-[#2E7D32] text-white font-semibold shadow-sm ring-1 ring-white/15' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <span class="material-symbols-outlined text-[20px]">manage_accounts</span>
                         <span>Kelola Akun</span>
@@ -145,7 +157,7 @@
     </div>
 
     <!-- 3. Footer Sidebar -->
-    <div class="p-3 border-t border-slate-700/60 bg-[#132038] flex-shrink-0">
+    <div class="p-3 border-t border-white/10 bg-[#002918] flex-shrink-0">
         <!-- Info Profil Petugas -->
         <div class="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between gap-2 mb-2.5">
             <div class="flex items-center gap-2.5 min-w-0">

@@ -218,9 +218,9 @@
                                         </div>
                                         <!-- Baris 2: Email -->
                                         <div class="flex items-center gap-1.5 text-slate-500">
-                                            <span class="material-symbols-outlined text-[15px] text-blue-500">mail</span>
+                                            <span class="material-symbols-outlined text-[15px] text-emerald-600">mail</span>
                                             @if($isEmail)
-                                                <a href="mailto:{{ $item->kontak }}" class="hover:underline hover:text-blue-600">
+                                                <a href="mailto:{{ $item->kontak }}" class="hover:underline hover:text-[#2E7D32]">
                                                     {{ $item->kontak }}
                                                 </a>
                                             @else
@@ -272,7 +272,7 @@
                                             Sudah Dibaca
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-[#1B5E20] border border-green-300">
                                             <span class="material-symbols-outlined text-[13px]">done_all</span>
                                             Selesai
                                         </span>
