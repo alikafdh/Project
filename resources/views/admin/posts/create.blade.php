@@ -23,12 +23,16 @@
             this.thumbnailPreview = null;
             document.getElementById('foto_thumbnail').value = '';
         }
-    }" class="pb-28">
+    }" class="pb-28 min-w-0">
 
         <!-- Trix Editor Assets -->
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
         <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
         <style>
+            trix-toolbar .trix-button-row {
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
             trix-toolbar .trix-button-group {
                 border-radius: 0.5rem;
                 overflow: hidden;
@@ -37,6 +41,8 @@
             }
             trix-editor {
                 min-height: 380px !important;
+                max-width: 100%;
+                overflow-wrap: anywhere;
                 border-color: #cbd5e1 !important;
                 border-radius: 0.75rem !important;
                 font-size: 0.95rem;
@@ -51,7 +57,7 @@
 
         <!-- Top Breadcrumb & Title Section -->
         <div class="mb-6 space-y-1">
-            <div class="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+            <div class="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 font-medium">
                 <a href="{{ route('admin.dashboard') }}" class="hover:text-slate-800">Admin Portal</a>
                 <span class="material-symbols-outlined text-[14px]">chevron_right</span>
                 <a href="{{ route('admin.posts.index') }}" class="hover:text-slate-800">Kelola Informasi</a>
@@ -59,13 +65,13 @@
                 <span class="text-[#2E7D32] font-semibold">Tambah Konten Baru</span>
             </div>
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-1">
-                <div>
+                <div class="min-w-0">
                     <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Tambah Konten Baru</h1>
                     <p class="text-sm text-slate-500 mt-0.5">
                         Buat publikasi baru berupa Laporan Program Kerja, Berita Kesehatan, atau Agenda Kegiatan Puskesmas Cilimus.
                     </p>
                 </div>
-                <a href="{{ route('admin.posts.index') }}" class="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto transition-colors shadow-sm">
+                <a href="{{ route('admin.posts.index') }}" class="h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto transition-colors shadow-sm whitespace-nowrap flex-shrink-0">
                     <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                     <span>Kembali ke Daftar</span>
                 </a>
@@ -90,10 +96,10 @@
             @csrf
             <input type="hidden" name="status" :value="statusPublished ? 'published' : 'draft'">
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
                 
                 <!-- KOLOM KIRI: Judul, Slug, Editor Trix (Cols 1-8 / 65%) -->
-                <div class="lg:col-span-8 space-y-6">
+                <div class="xl:col-span-8 space-y-6 min-w-0">
                     
                     <!-- Card: Judul & Auto-Slug -->
                     <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
@@ -116,14 +122,14 @@
 
                         <!-- Baris Auto-Slug Preview -->
                         <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
-                            <div class="flex items-center gap-1.5 overflow-hidden">
-                                <span class="material-symbols-outlined text-[16px] text-[#2E7D32]">link</span>
-                                <span class="text-slate-400 font-medium">Permalink Preview:</span>
-                                <span class="font-mono text-slate-700 truncate font-semibold">
+                            <div class="flex items-center gap-1.5 min-w-0 flex-1">
+                                <span class="material-symbols-outlined text-[16px] text-[#2E7D32] flex-shrink-0">link</span>
+                                <span class="text-slate-400 font-medium flex-shrink-0">Permalink Preview:</span>
+                                <span class="font-mono text-slate-700 truncate font-semibold min-w-0">
                                     puskesmascilimus.kuningankab.go.id/informasi/<span x-text="tipe" class="text-slate-500"></span>/<span x-text="slugify(judul) || 'judul-publikasi'" class="text-[#2E7D32]"></span>
                                 </span>
                             </div>
-                            <span class="text-[11px] text-slate-400">Otomatis digenerate</span>
+                            <span class="text-[11px] text-slate-400 flex-shrink-0">Otomatis digenerate</span>
                         </div>
                     </div>
 
@@ -156,7 +162,7 @@
                 </div>
 
                 <!-- KOLOM KANAN: Pengaturan Tipe, Klaster, Dynamic Sections, Thumbnail, Status (Cols 9-12 / 35%) -->
-                <div class="lg:col-span-4 space-y-6">
+                <div class="xl:col-span-4 space-y-6 min-w-0">
 
                     <!-- CARD 1: Pilihan Tipe Konten & Klaster ILP -->
                     <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
@@ -452,29 +458,29 @@
         <!-- FLOATING ACTION BAR DI BAGIAN BAWAH -->
         <div data-admin-floating-bar
              :class="{ 'md:left-60': desktopSidebarOpen, 'md:left-0': !desktopSidebarOpen }"
-             class="fixed bottom-0 left-0 md:left-60 right-0 bg-white/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(0,0,0,0.06)] z-30 px-6 md:px-8 py-3.5 border-t border-slate-200 transition-[left] duration-300 ease-in-out">
-            <div class="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
+             class="fixed bottom-0 left-0 md:left-60 right-0 bg-white/95 backdrop-blur-md shadow-[0_-4px_20px_rgba(0,0,0,0.06)] z-30 px-4 sm:px-6 md:px-8 py-3.5 border-t border-slate-200 transition-[left] duration-300 ease-in-out">
+            <div class="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('admin.posts.index') }}" class="h-11 px-5 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-colors">
+                    <a href="{{ route('admin.posts.index') }}" class="h-11 px-3 sm:px-5 rounded-xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 font-semibold text-xs flex items-center gap-1.5 transition-colors whitespace-nowrap">
                         <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                         <span>Batal</span>
                     </a>
-                    <span class="hidden sm:inline-block text-xs text-slate-400">
+                    <span class="hidden lg:inline-block text-xs text-slate-400">
                         Pastikan semua informasi wajib (*) telah terisi sebelum menyimpan.
                     </span>
                 </div>
 
-                <div class="flex items-center gap-2.5">
+                <div class="flex items-center gap-2 sm:gap-2.5">
                     <button type="button" 
                         @click="statusPublished = false; $nextTick(() => document.getElementById('postForm').submit())" 
-                        class="h-11 px-4 rounded-xl border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm">
+                        class="h-11 px-3 sm:px-4 rounded-xl border border-slate-300 text-slate-700 bg-white hover:bg-slate-50 font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm whitespace-nowrap">
                         <span class="material-symbols-outlined text-[16px]">save</span>
                         <span>Simpan Draf</span>
                     </button>
 
                     <button type="button" 
                         @click="document.getElementById('postForm').submit()" 
-                        class="h-11 px-6 rounded-xl text-white font-bold text-xs flex items-center gap-2 shadow-md hover:opacity-95 transition-all"
+                        class="h-11 px-4 sm:px-6 rounded-xl text-white font-bold text-xs flex items-center gap-2 shadow-md hover:opacity-95 transition-all whitespace-nowrap"
                         style="background-color: #2E7D32;">
                         <span class="material-symbols-outlined text-[18px]">check_circle</span>
                         <span>Simpan Post</span>

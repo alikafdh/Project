@@ -52,20 +52,20 @@
         }"
         @keydown.escape.window="sidebarOpen = false"
         @resize.window="if (window.innerWidth >= 768) sidebarOpen = false"
-        class="bg-slate-100 min-h-screen flex">
+        class="bg-slate-100 min-h-screen flex overflow-x-clip">
         <!-- Sidebar Navigation Component -->
         <x-admin.sidebar />
 
         <!-- Area Konten Utama -->
         <div data-admin-main
              :class="{ 'md:pl-60': desktopSidebarOpen, 'md:pl-0': !desktopSidebarOpen }"
-             class="flex-1 md:pl-60 flex flex-col min-h-screen transition-[padding] duration-300 ease-in-out">
+             class="flex-1 min-w-0 w-full md:pl-60 flex flex-col min-h-screen transition-[padding] duration-300 ease-in-out">
             <!-- Topbar Admin Component -->
             <x-admin.topbar :title="$title ?? null" />
 
             <!-- Session Flash Notifications -->
             @if(session('success') || session('status'))
-                <div class="px-6 md:px-8 pt-6">
+                <div class="px-4 sm:px-6 md:px-8 pt-6">
                     <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-emerald-600 text-[22px]">check_circle</span>
@@ -79,7 +79,7 @@
             @endif
 
             @if(session('error'))
-                <div class="px-6 md:px-8 pt-6">
+                <div class="px-4 sm:px-6 md:px-8 pt-6">
                     <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between shadow-sm">
                         <div class="flex items-center gap-3">
                             <span class="material-symbols-outlined text-rose-600 text-[22px]">error</span>
@@ -93,7 +93,7 @@
             @endif
 
             <!-- Main Content Area -->
-            <main class="p-6 md:p-8 flex-1">
+            <main class="p-4 sm:p-6 md:p-8 flex-1 min-w-0">
                 {{ $slot ?? '' }}
                 @yield('content')
             </main>

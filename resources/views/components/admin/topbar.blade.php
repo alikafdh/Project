@@ -25,13 +25,13 @@
     $activeTitle = $title ?? $breadcrumbTitle;
 @endphp
 
-<header class="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+<header class="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center justify-between gap-3 sticky top-0 z-30 shadow-xs">
     <!-- Sisi Kiri: Toggle Buka/Tutup Sidebar & Breadcrumb Navigasi Dinamis -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 min-w-0">
         <!-- Tombol Toggle Buka/Tutup Sidebar (Desktop & Mobile) -->
         <button @click="toggleSidebar()" 
                 type="button" 
-                class="p-2 rounded-xl text-slate-600 hover:bg-emerald-50 hover:text-[#2E7D32] border border-transparent hover:border-emerald-200 transition-all inline-flex items-center justify-center cursor-pointer"
+                class="p-2 rounded-xl text-slate-600 hover:bg-emerald-50 hover:text-[#2E7D32] border border-transparent hover:border-emerald-200 transition-all inline-flex items-center justify-center cursor-pointer flex-shrink-0"
                 :title="(typeof window !== 'undefined' && window.innerWidth >= 768) ? (desktopSidebarOpen ? 'Tutup Sidebar' : 'Buka Sidebar') : (sidebarOpen ? 'Tutup Menu' : 'Buka Menu')"
                 aria-label="Toggle Menu Navigasi">
             <span class="hidden md:inline-flex items-center justify-center">
@@ -45,19 +45,19 @@
         </button>
 
         <!-- Breadcrumb Navigasi Dinamis -->
-        <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-500">
-            <span class="hidden sm:inline">Admin Portal</span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 hidden sm:inline">chevron_right</span>
-            <span class="text-slate-600 hidden md:inline">UPTD Puskesmas Cilimus</span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 hidden md:inline">chevron_right</span>
-            <span class="text-[#2E7D32] font-bold">{{ $activeTitle }}</span>
+        <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 font-medium text-xs sm:text-sm text-slate-500 min-w-0">
+            <span class="hidden sm:inline whitespace-nowrap">Admin Portal</span>
+            <span class="material-symbols-outlined text-[16px] text-slate-400 hidden sm:inline flex-shrink-0">chevron_right</span>
+            <span class="text-slate-600 hidden lg:inline whitespace-nowrap">UPTD Puskesmas Cilimus</span>
+            <span class="material-symbols-outlined text-[16px] text-slate-400 hidden lg:inline flex-shrink-0">chevron_right</span>
+            <span class="text-[#2E7D32] font-bold truncate">{{ $activeTitle }}</span>
         </nav>
     </div>
 
     <!-- Sisi Kanan: Status Indikator Sistem, Lonceng Notifikasi, Avatar Admin -->
-    <div class="flex items-center gap-3 sm:gap-4">
+    <div class="flex items-center gap-2.5 sm:gap-4 flex-shrink-0">
         <!-- Status Indikator Sistem -->
-        <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+        <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold whitespace-nowrap">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Sistem Normal</span>
         </div>
