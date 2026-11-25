@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'api_key' => env('WHATSAPP_API_KEY', 'demo-fonnte-token-cilimus'),
+        'api_url' => env('WHATSAPP_API_URL', 'https://api.fonnte.com/send'),
+    ],
+
 ];
