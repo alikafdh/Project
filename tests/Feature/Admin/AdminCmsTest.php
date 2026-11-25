@@ -161,4 +161,55 @@ class AdminCmsTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    public function test_admin_layout_renders_sidebar_and_topbar_components(): void
+    {
+        Feedback::create([
+            'nama_pengirim' => 'Warga Cilimus',
+            'kontak'        => '08123456789',
+            'subjek'        => 'Pelayanan Ramah',
+            'isi_pesan'     => 'Pelayanan di poli umum sangat cepat dan memuaskan.',
+            'status'        => 'baru',
+        ]);
+
+        $response = $this->actingAs($this->petugas)->get('/admin/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee('Panel Admin');
+        $response->assertSee('UPTD Puskesmas Cilimus');
+        $response->assertSee(route('admin.dashboard'));
+        $response->assertSee(route('admin.posts.index'));
+        $response->assertSee(route('admin.clusters.index'));
+        $response->assertSee(route('admin.layanan.index'));
+        $response->assertSee(route('admin.profil.edit'));
+        $response->assertSee(route('admin.reminders.patients'));
+        $response->assertSee(route('admin.reminders.schedules'));
+        $response->assertSee(route('admin.reminders.logs'));
+        $response->assertSee(route('admin.saran.index'));
+        $response->assertSee('Sistem Normal');
+        $response->assertSee(route('admin.logout'));
+
+        // Regular admin should not see user management link
+        $response->assertDontSee(route('admin.users.index'));
+    }
+
+    public function test_superadmin_sees_kelola_akun_in_sidebar(): void
+    {
+        $response = $this->actingAs($this->superadmin)->get('/admin/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee(route('admin.users.index'));
+        $response->assertSee('Superadmin only');
+    }
+
+    public function test_admin_can_logout_via_admin_logout_route(): void
+    {
+        $this->actingAs($this->petugas);
+        $this->assertAuthenticated();
+
+        $response = $this->post(route('admin.logout'));
+
+        $this->assertGuest();
+        $response->assertRedirect('/');
+    }
 }

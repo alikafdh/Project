@@ -39,6 +39,9 @@ Route::get('/admin/login', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'status:aktif'])->prefix('admin')->name('admin.')->group(function () {
+    // Logout route for admin
+    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
     // 1. Dashboard CMS
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -47,6 +50,7 @@ Route::middleware(['auth', 'status:aktif'])->prefix('admin')->name('admin.')->gr
 
     // 3. Kelola Klaster ILP & Layanan Poliklinik
     Route::resource('klaster', KlasterController::class);
+    Route::get('/clusters', [KlasterController::class, 'index'])->name('clusters.index');
     Route::resource('layanan', LayananController::class);
 
     // 4. Kelola Profil Puskesmas
