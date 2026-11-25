@@ -299,6 +299,17 @@ class AdminCmsTest extends TestCase
             'status'        => 'baru',
         ]);
 
+        $indexResponse = $this->actingAs($this->petugas)->get(route('admin.saran.index'));
+        $indexResponse->assertStatus(200);
+        $indexResponse->assertSee('Total Masukan');
+        $indexResponse->assertSee('Belum Dibaca');
+        $indexResponse->assertSee('Sudah Ditindaklanjuti');
+        $indexResponse->assertSee('Warga Cilimus');
+        $indexResponse->assertSee('Pelayanan Ramah');
+
+        $feedbackResponse = $this->actingAs($this->petugas)->get(route('admin.feedback.index'));
+        $feedbackResponse->assertStatus(200);
+
         $response = $this->actingAs($this->petugas)->get('/admin/saran/' . $feedback->id);
         $response->assertStatus(200);
 
@@ -320,13 +331,24 @@ class AdminCmsTest extends TestCase
             'status'           => 'selesai',
             'catatan_internal' => 'Sudah diteruskan ke kepala puskesmas.',
         ]);
+
+        // Delete feedback
+        $deleteResponse = $this->actingAs($this->petugas)->delete('/admin/saran/' . $feedback->id);
+        $deleteResponse->assertRedirect();
+        $this->assertDatabaseMissing('feedbacks', [
+            'id' => $feedback->id,
+        ]);
     }
 
     public function test_superadmin_can_manage_users(): void
     {
         $response = $this->actingAs($this->superadmin)->get('/admin/users');
         $response->assertStatus(200);
+        $response->assertSee('Manajemen Akun Pengelola CMS');
+        $response->assertSee('Superadmin');
+        $response->assertSee('+ Tambah Akun Baru');
 
+        // Create new user
         $createResponse = $this->actingAs($this->superadmin)->post('/admin/users', [
             'nama_lengkap' => 'Petugas Baru',
             'username'     => 'petugas_baru',
@@ -339,6 +361,38 @@ class AdminCmsTest extends TestCase
         $createResponse->assertRedirect(route('admin.users.index'));
         $this->assertDatabaseHas('users', [
             'username' => 'petugas_baru',
+        ]);
+
+        $newUser = User::where('username', 'petugas_baru')->first();
+
+        // Update user
+        $updateResponse = $this->actingAs($this->superadmin)->put('/admin/users/' . $newUser->id, [
+            'nama_lengkap' => 'Petugas Baru Diedit',
+            'username'     => 'petugas_baru',
+            'email'        => 'petugas_baru@puskesmascilimus.id',
+            'peran'        => 'admin',
+            'status'       => 'nonaktif',
+        ]);
+
+        $updateResponse->assertRedirect(route('admin.users.index'));
+        $this->assertDatabaseHas('users', [
+            'id'           => $newUser->id,
+            'nama_lengkap' => 'Petugas Baru Diedit',
+            'status'       => 'nonaktif',
+        ]);
+
+        // Prevent superadmin from deleting own account
+        $deleteSelfResponse = $this->actingAs($this->superadmin)->delete('/admin/users/' . $this->superadmin->id);
+        $deleteSelfResponse->assertSessionHas('error');
+        $this->assertDatabaseHas('users', [
+            'id' => $this->superadmin->id,
+        ]);
+
+        // Delete other user
+        $deleteOtherResponse = $this->actingAs($this->superadmin)->delete('/admin/users/' . $newUser->id);
+        $deleteOtherResponse->assertRedirect(route('admin.users.index'));
+        $this->assertDatabaseMissing('users', [
+            'id' => $newUser->id,
         ]);
     }
 

@@ -58,6 +58,7 @@ Route::middleware(['auth', 'status:aktif'])->prefix('admin')->name('admin.')->gr
 
     // 5. Kotak Masuk Saran Warga
     Route::get('/saran', [FeedbackManageController::class, 'index'])->name('saran.index');
+    Route::get('/feedback', [FeedbackManageController::class, 'index'])->name('feedback.index');
     Route::get('/saran/{saran}', [FeedbackManageController::class, 'show'])->name('saran.show');
     Route::patch('/saran/{saran}/read', [FeedbackManageController::class, 'markAsRead'])->name('saran.read');
     Route::delete('/saran/{saran}', [FeedbackManageController::class, 'destroy'])->name('saran.destroy');
