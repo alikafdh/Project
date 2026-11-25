@@ -50,6 +50,22 @@ class AdminCmsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Panel Admin CMS');
+        $response->assertSee('Total Post Terbit');
+        $response->assertSee('Pasien Reminder');
+        $response->assertSee('WA Berhasil Terkirim');
+        $response->assertSee('Saran Belum Dibaca');
+        $response->assertSee('Konten Terbaru');
+        $response->assertSee('Saran Terkini');
+        $response->assertSee('Log Reminder Terakhir');
+        $response->assertViewHasAll([
+            'totalPost',
+            'totalPasienReminder',
+            'totalWaBerhasil',
+            'totalSaranBelumDibaca',
+            'kontenTerbaru',
+            'saranTerkini',
+            'logReminderTerakhir',
+        ]);
     }
 
     public function test_admin_can_create_klaster_ilp(): void

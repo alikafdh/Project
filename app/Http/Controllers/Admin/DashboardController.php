@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Feedback;
-use App\Models\KlasterILP;
-use App\Models\Layanan;
 use App\Models\Post;
 use App\Models\Reminder;
 use App\Models\ReminderLog;
@@ -15,27 +13,25 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $totalKlaster = KlasterILP::count();
-        $totalLayanan = Layanan::where('status', 'aktif')->count();
-        $totalPosts = Post::where('status', 'published')->count();
-        $totalSaranBaru = Feedback::where('status', 'baru')->count();
+        // 1. Hitung 4 Metrik Statistik Utama
+        $totalPost = Post::where('status', 'published')->count();
         $totalPasienReminder = Reminder::where('status', 'aktif')->count();
-        $totalLogsBerhasil = ReminderLog::where('status', 'berhasil')->count();
+        $totalWaBerhasil = ReminderLog::where('status', 'berhasil')->count();
+        $totalSaranBelumDibaca = Feedback::where('status', 'baru')->count();
 
-        $recentFeedbacks = Feedback::with('klaster')->latest()->take(5)->get();
-        $recentPosts = Post::with(['klaster', 'author'])->latest()->take(5)->get();
-        $recentLogs = ReminderLog::with('reminder')->latest('waktu_kirim')->take(5)->get();
+        // 2. Ambil Data Tabel Cepat
+        $kontenTerbaru = Post::with(['klaster', 'author'])->latest()->take(5)->get();
+        $saranTerkini = Feedback::with('klaster')->where('status', 'baru')->latest()->take(5)->get();
+        $logReminderTerakhir = ReminderLog::with('reminder.klaster')->latest()->take(5)->get();
 
         return view('admin.dashboard', compact(
-            'totalKlaster',
-            'totalLayanan',
-            'totalPosts',
-            'totalSaranBaru',
+            'totalPost',
             'totalPasienReminder',
-            'totalLogsBerhasil',
-            'recentFeedbacks',
-            'recentPosts',
-            'recentLogs'
+            'totalWaBerhasil',
+            'totalSaranBelumDibaca',
+            'kontenTerbaru',
+            'saranTerkini',
+            'logReminderTerakhir'
         ));
     }
 }
