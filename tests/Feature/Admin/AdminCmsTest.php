@@ -210,6 +210,65 @@ class AdminCmsTest extends TestCase
         $response = $this->post(route('admin.logout'));
 
         $this->assertGuest();
-        $response->assertRedirect('/');
+        $response->assertRedirect(route('admin.login'));
+    }
+
+    public function test_guest_can_render_admin_login_screen(): void
+    {
+        $response = $this->get(route('admin.login'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Portal Pengelola');
+        $response->assertSee('UPTD Puskesmas Cilimus — Backoffice');
+        $response->assertSee('Melayani dengan Sepenuh Hati');
+        $response->assertSee('Masuk ke Dashboard');
+    }
+
+    public function test_authenticated_admin_is_redirected_to_dashboard_from_login_screen(): void
+    {
+        $response = $this->actingAs($this->petugas)->get(route('admin.login'));
+
+        $response->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_admin_can_authenticate_via_admin_login_with_valid_credentials(): void
+    {
+        $response = $this->post(route('admin.login'), [
+            'username' => 'petugas',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
+        $response->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_admin_cannot_authenticate_with_invalid_credentials(): void
+    {
+        $response = $this->from(route('admin.login'))->post(route('admin.login'), [
+            'username' => 'petugas',
+            'password' => 'wrongpassword',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('admin.login'));
+        $response->assertSessionHasErrors('login_error');
+    }
+
+    public function test_admin_login_is_rate_limited_after_five_failed_attempts(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->from(route('admin.login'))->post(route('admin.login'), [
+                'username' => 'petugas_limit',
+                'password' => 'wrongpassword',
+            ]);
+        }
+
+        $response = $this->from(route('admin.login'))->post(route('admin.login'), [
+            'username' => 'petugas_limit',
+            'password' => 'wrongpassword',
+        ]);
+
+        $response->assertSessionHasErrors('login_error');
+        $this->assertTrue(str_contains(session('errors')->first('login_error'), 'Terlalu banyak percobaan login'));
     }
 }

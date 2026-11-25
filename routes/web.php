@@ -27,10 +27,9 @@ Route::get('/dashboard', function () {
     return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'status:aktif'])->name('dashboard');
 
-// Alias rute login admin
-Route::get('/admin/login', function () {
-    return redirect()->route('login');
-})->name('admin.login');
+// Halaman Login & Autentikasi Admin Pengelola
+Route::get('/admin/login', [\App\Http\Controllers\Admin\AuthController::class, 'loginForm'])->name('admin.login');
+Route::post('/admin/login', [\App\Http\Controllers\Admin\AuthController::class, 'authenticate']);
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +39,7 @@ Route::get('/admin/login', function () {
 */
 Route::middleware(['auth', 'status:aktif'])->prefix('admin')->name('admin.')->group(function () {
     // Logout route for admin
-    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::post('/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])->name('logout');
 
     // 1. Dashboard CMS
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
