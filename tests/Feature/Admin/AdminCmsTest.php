@@ -9,6 +9,8 @@ use App\Models\Post;
 use App\Models\Reminder;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AdminCmsTest extends TestCase
@@ -103,6 +105,65 @@ class AdminCmsTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_view_posts_index_with_filters(): void
+    {
+        $klaster = KlasterILP::create(['nama' => 'Klaster 1: Manajemen', 'slug' => 'klaster-1']);
+        Post::create([
+            'judul' => 'Berita Kegiatan 1',
+            'tipe' => 'berita',
+            'status' => 'published',
+            'isi' => 'Konten berita 1',
+            'klaster_id' => $klaster->id,
+            'admin_id' => $this->petugas->id,
+        ]);
+        Post::create([
+            'judul' => 'Laporan Akuntabilitas Tahunan',
+            'tipe' => 'laporan',
+            'status' => 'draft',
+            'isi' => 'Konten laporan tahunan',
+            'admin_id' => $this->petugas->id,
+        ]);
+
+        $response = $this->actingAs($this->petugas)->get('/admin/posts');
+        $response->assertStatus(200);
+        $response->assertSee('Kelola Informasi');
+        $response->assertSee('Berita Kegiatan 1');
+        $response->assertSee('Laporan Akuntabilitas Tahunan');
+
+        // Test filter search
+        $searchResponse = $this->actingAs($this->petugas)->get('/admin/posts?search=Akuntabilitas');
+        $searchResponse->assertStatus(200);
+        $searchResponse->assertSee('Laporan Akuntabilitas Tahunan');
+        $searchResponse->assertDontSee('Berita Kegiatan 1');
+
+        // Test filter tipe
+        $tipeResponse = $this->actingAs($this->petugas)->get('/admin/posts?tipe=berita');
+        $tipeResponse->assertStatus(200);
+        $tipeResponse->assertSee('Berita Kegiatan 1');
+        $tipeResponse->assertDontSee('Laporan Akuntabilitas Tahunan');
+    }
+
+    public function test_admin_can_view_post_create_and_edit_page(): void
+    {
+        $createResponse = $this->actingAs($this->petugas)->get('/admin/posts/create');
+        $createResponse->assertStatus(200);
+        $createResponse->assertSee('Tambah Konten Baru');
+        $createResponse->assertSee('Laporan Program');
+
+        $post = Post::create([
+            'judul' => 'Post Untuk Diedit',
+            'tipe' => 'berita',
+            'status' => 'published',
+            'isi' => 'Isi awal postingan',
+            'admin_id' => $this->petugas->id,
+        ]);
+
+        $editResponse = $this->actingAs($this->petugas)->get('/admin/posts/' . $post->id . '/edit');
+        $editResponse->assertStatus(200);
+        $editResponse->assertSee('Ubah Data Konten Publikasi');
+        $editResponse->assertSee('Post Untuk Diedit');
+    }
+
     public function test_admin_can_create_post(): void
     {
         $response = $this->actingAs($this->petugas)->post('/admin/posts', [
@@ -116,6 +177,114 @@ class AdminCmsTest extends TestCase
         $this->assertDatabaseHas('posts', [
             'judul' => 'Penyuluhan Kesehatan Balita Posyandu Melati',
         ]);
+    }
+
+    public function test_admin_can_create_laporan_with_pdf_and_thumbnail_upload(): void
+    {
+        Storage::fake('public');
+
+        $thumbnail = UploadedFile::fake()->image('cover.jpg', 600, 400);
+        $pdf = UploadedFile::fake()->create('laporan.pdf', 500, 'application/pdf');
+
+        $response = $this->actingAs($this->petugas)->post('/admin/posts', [
+            'judul'          => 'Laporan Tahunan SPJ BOK 2026',
+            'tipe'           => 'laporan',
+            'status'         => 'published',
+            'isi'            => '<p>Rincian realisasi anggaran dan serapan program.</p>',
+            'periode_bulan'  => 'Oktober',
+            'periode_tahun'  => 2026,
+            'foto_thumbnail' => $thumbnail,
+            'file_pdf'       => $pdf,
+        ]);
+
+        $response->assertRedirect(route('admin.posts.index'));
+
+        $post = Post::where('judul', 'Laporan Tahunan SPJ BOK 2026')->first();
+        $this->assertNotNull($post);
+        $this->assertEquals('laporan', $post->tipe);
+        $this->assertEquals('Oktober', $post->periode_bulan);
+        $this->assertEquals(2026, $post->periode_tahun);
+        $this->assertNotNull($post->foto_thumbnail);
+        $this->assertNotNull($post->file_pdf);
+
+        Storage::disk('public')->assertExists($post->foto_thumbnail);
+        Storage::disk('public')->assertExists($post->file_pdf);
+    }
+
+    public function test_admin_can_create_agenda_post(): void
+    {
+        $response = $this->actingAs($this->petugas)->post('/admin/posts', [
+            'judul'           => 'Senam Lansia dan Skrining PTM Ciawigebang',
+            'tipe'            => 'agenda',
+            'status'          => 'published',
+            'isi'             => '<p>Jadwal rutin senam kebugaran lansia.</p>',
+            'waktu_kegiatan'  => '2026-10-30 08:00:00',
+            'lokasi_kegiatan' => 'Balai Pertemuan Desa Ciawigebang',
+            'sasaran_peserta' => 'Warga pra-lansia dan lansia 55+ tahun',
+        ]);
+
+        $response->assertRedirect(route('admin.posts.index'));
+
+        $this->assertDatabaseHas('posts', [
+            'judul'           => 'Senam Lansia dan Skrining PTM Ciawigebang',
+            'tipe'            => 'agenda',
+            'lokasi_kegiatan' => 'Balai Pertemuan Desa Ciawigebang',
+            'sasaran_peserta' => 'Warga pra-lansia dan lansia 55+ tahun',
+        ]);
+    }
+
+    public function test_admin_can_update_and_delete_post(): void
+    {
+        $post = Post::create([
+            'judul'    => 'Judul Awal',
+            'tipe'     => 'berita',
+            'status'   => 'draft',
+            'isi'      => 'Konten awal',
+            'admin_id' => $this->petugas->id,
+        ]);
+
+        // Update post
+        $updateResponse = $this->actingAs($this->petugas)->put('/admin/posts/' . $post->id, [
+            'judul'  => 'Judul Yang Diperbarui',
+            'tipe'   => 'berita',
+            'status' => 'published',
+            'isi'    => 'Konten yang sudah direvisi',
+        ]);
+
+        $updateResponse->assertRedirect(route('admin.posts.index'));
+        $this->assertDatabaseHas('posts', [
+            'id'     => $post->id,
+            'judul'  => 'Judul Yang Diperbarui',
+            'status' => 'published',
+        ]);
+
+        // Delete post
+        $deleteResponse = $this->actingAs($this->petugas)->delete('/admin/posts/' . $post->id);
+        $deleteResponse->assertRedirect(route('admin.posts.index'));
+        $this->assertDatabaseMissing('posts', [
+            'id' => $post->id,
+        ]);
+    }
+
+    public function test_post_auto_slug_prevents_duplicate_collision(): void
+    {
+        $this->actingAs($this->petugas)->post('/admin/posts', [
+            'judul'  => 'Penyuluhan DBD',
+            'tipe'   => 'berita',
+            'status' => 'published',
+            'isi'    => 'Konten satu',
+        ]);
+
+        $this->actingAs($this->petugas)->post('/admin/posts', [
+            'judul'  => 'Penyuluhan DBD',
+            'tipe'   => 'berita',
+            'status' => 'published',
+            'isi'    => 'Konten dua',
+        ]);
+
+        $posts = Post::where('judul', 'Penyuluhan DBD')->get();
+        $this->assertCount(2, $posts);
+        $this->assertNotEquals($posts[0]->slug, $posts[1]->slug);
     }
 
     public function test_admin_can_view_and_update_feedback(): void
