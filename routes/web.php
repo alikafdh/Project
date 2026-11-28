@@ -9,6 +9,11 @@ use App\Http\Controllers\Admin\ProfileManageController;
 use App\Http\Controllers\Admin\ReminderController;
 use App\Http\Controllers\Admin\UserManageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Public\FeedbackController as PublicFeedbackController;
+use App\Http\Controllers\Public\HomeController as PublicHomeController;
+use App\Http\Controllers\Public\PostController as PublicPostController;
+use App\Http\Controllers\Public\ProfileController as PublicProfileController;
+use App\Http\Controllers\Public\ServiceController as PublicServiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,9 +22,26 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Beranda / Portal Publik (Dikerjakan oleh Anggota 1)
-Route::get('/', function () {
-    return view('welcome');
+// Portal Publik (Frontend)
+Route::name('public.')->group(function () {
+    Route::get('/', [PublicHomeController::class, 'index'])->name('home');
+
+    Route::get('/profil', [PublicProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profil/visi-misi', [PublicProfileController::class, 'visiMisi'])->name('profile.visi-misi');
+    Route::get('/profil/struktur', [PublicProfileController::class, 'strukturOrganisasi'])->name('profile.struktur');
+    Route::get('/profil/wilayah', [PublicProfileController::class, 'wilayahKerja'])->name('profile.wilayah');
+    Route::get('/profil/fasilitas', [PublicProfileController::class, 'fasilitas'])->name('profile.fasilitas');
+
+    Route::get('/layanan', [PublicServiceController::class, 'index'])->name('services.index');
+    Route::get('/layanan/alur', [PublicServiceController::class, 'alurPelayanan'])->name('services.alur');
+    Route::get('/layanan/{slug}', [PublicServiceController::class, 'show'])->name('services.show');
+
+    Route::get('/informasi', [PublicPostController::class, 'index'])->name('posts.index');
+    Route::get('/informasi/{slug}/unduh-pdf', [PublicPostController::class, 'downloadPdf'])->name('posts.download');
+    Route::get('/informasi/{slug}', [PublicPostController::class, 'show'])->name('posts.show');
+
+    Route::get('/kontak', [PublicFeedbackController::class, 'index'])->name('feedback.index');
+    Route::post('/kontak/kirim-saran', [PublicFeedbackController::class, 'store'])->name('feedback.store');
 });
 
 // Redirect default Breeze dashboard ke Admin Dashboard
